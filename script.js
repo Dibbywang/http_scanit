@@ -1,90 +1,67 @@
-function uploadImage() {
-    console.log('uploadImage called');
-    const fileInput = document.getElementById('fileInput');
-    const preview = document.getElementById('preview');
+// More API functions here:
+// https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
-    fileInput.addEventListener('change', function() {
-    const file = this.files[0];
-    const reader = new FileReader();
+// the link to your model provided by Teachable Machine export panel
+const URL = "model/";
 
-    reader.addEventListener('load', function() {
-        preview.src = reader.result;
-        console.log('uploadImage complete');
-        processImage();
+let model, webcam, labelContainer, maxPredictions;
 
-    });
-
-    reader.readAsDataURL(file);
-    });
-
-
-}
-function processImage () {
-    console.log('processImage called');
-    const uploadedImg = document.getElementById('preview');
-    let arrResult = [];
-    let numCompleted = 0;
-    
-    for (let i = 0; i < 45; i++){
-        const currentImg = document.getElementById('localImage'+(i+1).toString());
-        compareImage(uploadedImg, currentImg).then(function(data) {
-            arrResult.push(data);
-            numCompleted++;
-
-            if (numCompleted === 45) {
-                let minIndex = findBestFit(arrResult);
-                if (minIndex === 'none'){
-                    console.log('no good matches detected, retry');
-                }
-                else{
-                    noIMG = document.getElementById('localImage' + (minIndex+1).toString()).src;
-                    console.log('best match at ' + noIMG);
-                }
-            }
-        });
-    }
-}
-
-function compareImage(img1, img2) {
-    console.log('compareImage called');
-    return new Promise(function(resolve, reject) {
-        resemble(img1.src)
-            .compareTo(img2.src)
-            .scaleToSameSize()
-            .ignoreAntialiasing()
-            .onComplete(function(data) {
-            resolve(data.misMatchPercentage);
-        });
-    });
-}
-
-function findBestFit (arr){
-    console.log('findbestfit called');
-    let threashold = 5;
-    let min = 100;
-    let minId = 0;
-    let allBadFit = true;
-
-    for (let i = 0; i < arr.length; i++){
-
-        if (arr[i] < (100-threashold)){
-            allBadFit = false;
-            if (min > arr[i]){
-                min = arr[i];
-                minId = i;
-            }    
+// Load the image model and setup the webcam
+async function init() {
+    navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment'
         }
-    }
+    });
 
-    if (allBadFit){
-        return 'none';
-    }
-    else{
-        console.log(arr[minId]);
-        return minId;
-    }
+    const modelURL = URL + "model.json";
+    const metadataURL = URL + "metadata.json";
 
+    // load the model and metadata
+    // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+    // or files from your local hard drive
+    // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+    model = await tmImage.load(modelURL, metadataURL);
+    maxPredictions = model.getTotalClasses();
 
+    // Convenience function to setup a webcam
+    const flip = true; // whether to flip the webcam
+    webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+    await webcam.setup(); // request access to the webcam
+    await webcam.play();
+    window.requestAnimationFrame(loop);
+
+    // append elements to the DOM
+    document.getElementById("webcam-container").appendChild(webcam.canvas);
+    labelContainer = document.getElementById("label-container");
+    for (let i = 0; i < maxPredictions; i++) { // and class labels
+        labelContainer.appendChild(document.createElement("div"));
+    }
 }
 
+async function loop() {
+    webcam.update(); // update the webcam frame
+    await predict();
+    window.requestAnimationFrame(loop);
+}
 
+// run the webcam image through the image model
+async function predict() {
+    // predict can take in an image, video or canvas html element
+    const prediction = await model.predict(webcam.canvas);
+    let max = 0;
+    let maxId = 0;
+    for (let i = 0; i < maxPredictions; i++) {
+        if (max < prediction[i].probability.toFixed(2)){
+            max = prediction[i].probability.toFixed(2);
+            maxId = i;
+        }
+        const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        labelContainer.childNodes[i].innerHTML = classPrediction;   
+    }
+    if (max > 0.95){
+        window.location.replace("/html/"+prediction[maxId].className+".html");
+    }
+
+}
