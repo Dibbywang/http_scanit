@@ -1,0 +1,8 @@
+.referenceImg{
+    display: none;
+}
+
+#preview{
+    height: fit-content;
+    width: fit-content;
+}
