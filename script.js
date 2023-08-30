@@ -8,12 +8,6 @@ let model, webcam, labelContainer, maxPredictions;
 
 // Load the image model and setup the webcam
 async function init() {
-    navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'environment'
-        }
-    });
-
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
 
