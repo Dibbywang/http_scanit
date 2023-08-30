@@ -6,3 +6,7 @@
     height: fit-content;
     width: fit-content;
 }
+
+.button {
+    font-size: 30px;
+}
