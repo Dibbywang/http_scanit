@@ -54,8 +54,9 @@ async function predict() {
             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         labelContainer.childNodes[i].innerHTML = classPrediction;   
     }
+
     if (max > 0.95){
-        window.location.replace("/html/"+prediction[maxId].className+".html");
+        window.location.href = "./html/"+prediction[maxId].className+".html";
     }
 
 }
