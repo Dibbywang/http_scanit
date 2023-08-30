@@ -10,3 +10,8 @@
 .button {
     font-size: 30px;
 }
+
+canvas {
+    width: 60%;
+    height: 60%;
+}
