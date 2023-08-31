@@ -7,12 +7,14 @@ Installation
 Clone this repository.
 
 Usage
-localhost the file through python -m http.server
+localhost the file through 
+  python -m http.server
 Allow access to your webcam.
 Show an image to your webcam and wait for the application to recognize it.
 See that you have been redirected
 
-Try the webapp by visiting dibbywang.github.io/http_scanit
+Try the webapp by visiting 
+  dibbywang.github.io/http_scanit
 
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
