@@ -17,7 +17,7 @@ This project is a web application with no backend requirement that utilizes the 
 
 
 <h3>Methods</h3>
-- Tensorflow model trained with [teachable_machine](https://teachablemachine.withgoogle.com/train) and around 8 images per class.
+- Tensorflow model trained with [teachable machine](https://teachablemachine.withgoogle.com/) train and around 8 images per class.
 
 
 <h3>Try the webapp by visiting [dibbywang.github.io/http_scanit](https://dibbywang.github.io/http_scanit)</h3>
