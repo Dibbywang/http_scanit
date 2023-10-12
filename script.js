@@ -56,7 +56,10 @@ async function predict() {
     }
 
     if (max > 0.95){
-        window.location.href = "./html/"+prediction[maxId].className+".html";
+        // window.location.href = "./html/"+prediction[maxId].className+".html";
+        webcam = document.getElementById('webcam-container');
+        label = document.getElementById('label-container');
+        webcam.style.display = 'none';
     }
 
 }
