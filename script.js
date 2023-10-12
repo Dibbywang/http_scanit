@@ -19,9 +19,9 @@ async function init() {
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
-    const flip = true; // whether to flip the webcam
+    const flip = false; // whether to flip the webcam
     webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
-    await webcam.setup(); // request access to the webcam
+    await webcam.setup({ facingMode: "environment" }); // request access to the webcam
     await webcam.play();
     window.requestAnimationFrame(loop);
 
@@ -60,6 +60,9 @@ async function predict() {
         webcam = document.getElementById('webcam-container');
         label = document.getElementById('label-container');
         webcam.style.display = 'none';
+ 
+        document.getElementById('test').innerHTML = prediction[maxId].className;
+ 
     }
 
 }
