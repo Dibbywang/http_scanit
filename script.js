@@ -20,7 +20,7 @@ async function init() {
 
     // Convenience function to setup a webcam
     const flip = false; // whether to flip the webcam
-    webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+    webcam = new tmImage.Webcam(800, 800, flip); // width, height, flip
     await webcam.setup({ facingMode: "environment" }); // request access to the webcam
     await webcam.play();
     window.requestAnimationFrame(loop);
@@ -57,11 +57,15 @@ async function predict() {
 
     if (max > 0.95){
         // window.location.href = "./html/"+prediction[maxId].className+".html";
-        webcam = document.getElementById('webcam-container');
-        label = document.getElementById('label-container');
-        webcam.style.display = 'none';
- 
+        // webcam = document.getElementById('webcam-container');
+        // label = document.getElementById('label-container');
+        // webcam.style.display = 'none';
+        // alert("111");
+
         document.getElementById('test').innerHTML = prediction[maxId].className;
+        // alert(prediction[maxId].className);
+
+        window.location.href = "./media/" + prediction[maxId].className +".mp4";
  
     }
 
