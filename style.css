@@ -11,6 +11,10 @@
     font-size: 30px;
 }
 
+#hidden {
+    display: none;
+}
+
 canvas {
     width: 60%;
     height: 60%;
